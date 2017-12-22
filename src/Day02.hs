@@ -19,3 +19,8 @@ calculate [] = 0
 calculate (xs:xss) = diff + (calculate xss)
   where
     diff = (maximum xs) - (minimum xs)
+
+---
+
+checksum2 :: [String] -> Int
+checksum2 _ = 0
