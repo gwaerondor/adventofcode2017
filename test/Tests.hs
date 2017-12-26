@@ -9,6 +9,7 @@ import Day01 as D1 (checksum, checksum2)
 import Day02 as D2 (checksum, checksum2)
 import Day03 as D3 (distance)
 import Day04 as D4 (hasNoDuplicates, hasNoAnagrams)
+import Day05 as D5 (getTerminationIndex)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -74,3 +75,6 @@ specs = describe "Advent of Code 2017" $ do
       D4.hasNoAnagrams "iiii oiii ooii oooi oooo" `shouldBe` True
     it "oiii ioii iioi iiio is not valid" $
       D4.hasNoAnagrams "oiii ioii iioi iiio" `shouldBe` False
+  describe "Day 05 (1)" $ do
+    it "Simple maze should be escaped in five steps" $
+      D5.getTerminationIndex [0, 3, 0, 1, -3] `shouldBe` 5
