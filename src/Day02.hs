@@ -1,5 +1,6 @@
 module Day02 where
 import Lib (fileToLines, apply)
+import Data.List ((!!), (\\))
 import Data.List.Split (splitOn)
 
 day02_1 :: IO String
@@ -23,4 +24,21 @@ calculate (xs:xss) = diff + (calculate xss)
 ---
 
 checksum2 :: [String] -> Int
-checksum2 _ = 0
+checksum2 css = (calculate2 . transform) css
+
+calculate2 :: [[Int]] -> Int
+calculate2 xss = sum $ map quota $ map findDivisible xss
+
+quota :: (Int, Int) -> Int
+quota (x, y) = x `div` y
+
+findDivisible :: [Int] -> (Int, Int)
+findDivisible xs = findDivisibleByIndex 0 xs
+
+findDivisibleByIndex :: Int -> [Int] -> (Int, Int)
+findDivisibleByIndex i xs
+  | filtered == [] = findDivisibleByIndex (i + 1) xs
+  | otherwise = (head $ filtered, x)
+  where
+    x = xs !! i
+    filtered = filter (\n -> (n `mod` x) == 0) (filter (/= x) xs)
