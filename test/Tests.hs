@@ -8,7 +8,7 @@ import Data.List         (intersperse)
 import Day01 as D1 (checksum, checksum2)
 import Day02 as D2 (checksum, checksum2)
 import Day03 as D3 (distance)
-import Day04 as D4 (isValidPassphrase)
+import Day04 as D4 (hasNoDuplicates, hasNoAnagrams)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -58,8 +58,19 @@ specs = describe "Advent of Code 2017" $ do
   --     D3.distance 1024 `shouldBe` 31
   describe "Day 04 (1)" $ do
     it "aa bb cc dd ee is valid." $
-      D4.isValidPassphrase "aa bb cc dd ee" `shouldBe` True
+      D4.hasNoDuplicates "aa bb cc dd ee" `shouldBe` True
     it "aa bb cc dd aa is not valid" $
-      D4.isValidPassphrase "aa bb cc dd aa" `shouldBe` False
+      D4.hasNoDuplicates "aa bb cc dd aa" `shouldBe` False
     it "aa bb cc dd aaa is valid" $
-      D4.isValidPassphrase "aa bb cc dd aaa" `shouldBe` True
+      D4.hasNoDuplicates "aa bb cc dd aaa" `shouldBe` True
+  describe "Day 04 (2)" $ do
+    it "abcde fghij is a valid passphrase" $
+      D4.hasNoAnagrams "abcde fghij" `shouldBe` True
+    it "abcde xyz ecdab is not valid" $
+      D4.hasNoAnagrams "abcde xyz ecdab" `shouldBe` False
+    it "a ab abc abd abf abj" $
+      D4.hasNoAnagrams "a ab abc abd abf abj" `shouldBe` True
+    it "iiii oiii ooii oooi oooo is valid." $
+      D4.hasNoAnagrams "iiii oiii ooii oooi oooo" `shouldBe` True
+    it "oiii ioii iioi iiio is not valid" $
+      D4.hasNoAnagrams "oiii ioii iioi iiio" `shouldBe` False
