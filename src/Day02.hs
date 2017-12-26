@@ -1,11 +1,16 @@
 module Day02 where
 import Lib (fileToLines, apply)
-import Data.List ((!!), (\\))
+import Data.List ((!!))
 import Data.List.Split (splitOn)
 
 day02_1 :: IO String
-day02_1 = apply checksum fileContents
-  where
+day02_1 = run checksum
+
+day02_2 :: IO String
+day02_2 = run checksum2
+
+run f = apply f fileContents
+  where 
     fileContents = fileToLines path
     path = "/mnt/c/Users/Robin/adventofcode2017/inputs/day02.txt"
 
@@ -41,4 +46,7 @@ findDivisibleByIndex i xs
   | otherwise = (head $ filtered, x)
   where
     x = xs !! i
-    filtered = filter (\n -> (n `mod` x) == 0) (filter (/= x) xs)
+    filtered = filter (`divisible` x) (filter (/= x) xs)
+
+divisible :: Int -> Int -> Bool
+divisible x y = (x `mod` y) == 0
