@@ -7,6 +7,8 @@ import Data.List         (intersperse)
 
 import Day01 as D1 (checksum, checksum2)
 import Day02 as D2 (checksum, checksum2)
+import Day03 as D3 (distance)
+import Day04 as D4 (isValidPassphrase)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -45,3 +47,19 @@ specs = describe "Advent of Code 2017" $ do
                                             "9473",
                                             "3865"])
       `shouldBe` 9
+  -- describe "Day 03 (1)" $ do
+  --   it "Square 1 takes 0 steps" $
+  --     D3.distance 1 `shouldBe` 0
+  --   it "Square 12 takes 3 steps" $
+  --     D3.distance 12 `shouldBe` 3
+  --   it "Square 23 takes 2 steps" $
+  --     D3.distance 23 `shouldBe` 2
+  --   it "Square 1024 takes 31 steps" $
+  --     D3.distance 1024 `shouldBe` 31
+  describe "Day 04 (1)" $ do
+    it "aa bb cc dd ee is valid." $
+      D4.isValidPassphrase "aa bb cc dd ee" `shouldBe` True
+    it "aa bb cc dd aa is not valid" $
+      D4.isValidPassphrase "aa bb cc dd aa" `shouldBe` False
+    it "aa bb cc dd aaa is valid" $
+      D4.isValidPassphrase "aa bb cc dd aaa" `shouldBe` True
