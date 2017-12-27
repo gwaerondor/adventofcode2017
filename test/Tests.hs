@@ -10,6 +10,7 @@ import Day02 as D2 (checksum, checksum2)
 import Day03 as D3 (distance)
 import Day04 as D4 (hasNoDuplicates, hasNoAnagrams)
 import Day05 as D5 (getTerminationIndex)
+import Day06 as D6 (cyclesBeforeLoop)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -75,6 +76,12 @@ specs = describe "Advent of Code 2017" $ do
       D4.hasNoAnagrams "iiii oiii ooii oooi oooo" `shouldBe` True
     it "oiii ioii iioi iiio is not valid" $
       D4.hasNoAnagrams "oiii ioii iioi iiio" `shouldBe` False
-  describe "Day 05 (1)" $ do
-    it "Simple maze should be escaped in five steps" $
-      D5.getTerminationIndex [0, 3, 0, 1, -3] `shouldBe` 5
+  -- describe "Day 05 (1)" $ do
+  --   it "Simple maze should be escaped in five steps" $
+  --     D5.getTerminationIndex [0, 3, 0, 1, -3] `shouldBe` 5
+  describe "Day 05 (2)" $ do
+    it "Simple maze should be escaped in ten steps" $
+      D5.getTerminationIndex [0, 3, 0, 1, -3] `shouldBe` 10
+  describe "Day 06 (1)" $ do
+    it "Simple memory base loops after 5 reallocations" $
+      D6.cyclesBeforeLoop [0, 2, 7, 0]  `shouldBe` 5
