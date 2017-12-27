@@ -1,6 +1,6 @@
 module Day05 where
 import Lib (fileToLines, apply)
-import Data.List ((!!))
+import Data.Array (Array, listArray, (//), (!), bounds)
 
 day05_1 :: IO String
 day05_1 = apply (getTerminationIndex . transform) contents
@@ -12,17 +12,22 @@ transform :: [String] -> [Int]
 transform cs = map read cs
 
 getTerminationIndex :: [Int] -> Int
-getTerminationIndex xs = gti xs 1 0
+getTerminationIndex xs = gti (listArray (1, length xs) xs) 1 0
 
-gti :: [Int] -> Int -> Int -> Int
+gti :: Array Int Int -> Int -> Int -> Int
 gti xs i steps
-  | i > length xs = steps
-  | otherwise = gti (update xs i) nextIndex (steps + 1)
+  | i > size = steps
+  | otherwise = ((gti $! incremented) $! nextIndex) $! nextStep
   where
-    nextIndex = i + xs !! (i-1)
+    incremented = incrementAt i xs
+    nextIndex = i + xs ! i
+    nextStep = 1 + steps
+    size = snd $ bounds xs
 
-update :: [Int] -> Int -> [Int]
-update xs i = incrementAt i xs
-
-incrementAt 1 (x:xs) = (x+1):xs
-incrementAt i (x:xs) = x:(incrementAt (i-1) xs)
+incrementAt :: Int -> Array Int Int -> Array Int Int
+incrementAt i xs = case x >= 3 of
+                     True -> xs // [(i, x - 1)]
+                     False -> xs // [(i, x + 1)]
+-- incrementAt i xs = xs // [(i, x+1)]
+  where
+    x = xs ! i
