@@ -11,6 +11,7 @@ import Day03 as D3 (distance)
 import Day04 as D4 (hasNoDuplicates, hasNoAnagrams)
 import Day05 as D5 (getTerminationIndex)
 import Day06 as D6 (cyclesBeforeLoop)
+import Day07 as D7 (getRootNode, createTree)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -85,3 +86,19 @@ specs = describe "Advent of Code 2017" $ do
   describe "Day 06 (1)" $ do
     it "Simple memory base loops after 5 reallocations" $
       D6.cyclesBeforeLoop [0, 2, 7, 0]  `shouldBe` 5
+  describe "Day 07 (1)" $ do
+    it "Small tree has tknk as its root" $
+      D6.getRootNode (D6.createTree ["pbga (66)",
+                                     "xhth (57)",
+                                     "ebii (61)",
+                                     "havc (66)",
+                                     "ktlj (57)",
+                                     "fwft (72) -> ktlj, cntj, xhth",
+                                     "qoyq (66)",
+                                     "padx (45) -> pbga, havc, qoyq",
+                                     "tknk (41) -> ugml, padx, fwft",
+                                     "jptl (61)",
+                                     "ugml (68) -> gyxo, ebii, jptl",
+                                     "gyxo (61)",
+                                     "cntj (57)"])
+      `shouldBe` "tknk"

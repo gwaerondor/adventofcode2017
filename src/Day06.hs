@@ -1,10 +1,18 @@
 module Day06 where
-import Data.List (elemIndices, nub)
+import Data.List (elemIndices, nub, (!!))
 
 day06_1 :: Int
 day06_1 = cyclesBeforeLoop input
   where
     input = [11, 11, 13, 7, 0, 15, 5, 5, 4, 4, 1, 1, 7, 1, 15, 11]
+
+-- I can optimise this by only counting the amount of iterations before the initial state is obtained again
+-- Don't need to keep all the old states in this example.
+day06_2 :: Int
+day06_2 = cyclesBeforeLoop input
+  where
+    input = (iterate redistribute [11, 11, 13, 7, 0, 15, 5, 5, 4, 4, 1, 1, 7, 1, 15, 11]) !! firstRepeatedIndex
+    firstRepeatedIndex = 4074
 
 cyclesBeforeLoop :: [Int] -> Int
 cyclesBeforeLoop input = cbl input [] 0
