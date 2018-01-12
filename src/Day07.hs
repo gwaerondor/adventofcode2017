@@ -1,33 +1,61 @@
 module Day07 where
 import Lib (fileToLines, apply)
+import Data.List ((!!), findIndices, findIndex)
 
-data Tree = Tree Name [Tree] deriving (Eq, Show)
+data Node = Node Name [Name] deriving (Eq, Show)
 type Name = String
 
 day07_1 :: IO String
-day07_1 = apply (getRootNode . createTree) contents
+day07_1 = apply (getRootNode . createNodes) contents
   where
     contents = fileToLines path
     path = "/mnt/c/Users/Robin/adventofcode2017/inputs/day07.txt"
 
-getRootNode :: Tree -> String
-getRootNode tree = getName tree
+getRootNode :: [Node] -> String
+getRootNode nodes = getRootNode' nodes 0
 
-createTree :: [String] -> Tree
-createTree _ = newTree "hello" []
+getRootNode' :: [Node] -> Int -> String
+getRootNode' nodes ix = case getParentIndex (nodes !! ix) nodes of
+                          Nothing -> getName (nodes !! ix)
+                          Just n -> getRootNode' nodes n
 
-getName :: Tree -> Name
-getName (Tree name _) = name
+getParentIndex :: Node -> [Node] -> Maybe Int
+getParentIndex n ns = findIndex (`hasChild` (getName n)) ns
 
-getChildren :: Tree -> [Tree]
-getChildren (Tree _ children) = children
+hasChild :: Node -> Name -> Bool
+hasChild n c = any (== c) (getChildren n)
 
-newTree :: Name -> [Tree] -> Tree
-newTree name children = Tree name children
+createNodes :: [String] -> [Node]
+createNodes ss = map parseNode ss
 
-addChild :: Tree -> Tree -> Tree
-addChild (Tree name children) child = Tree name (child:children)
+parseNode :: String -> Node
+parseNode s = Node (findName tokens) (findChildren tokens)
+  where
+    tokens = words s
 
-isLeaf :: Tree -> Bool
-isLeaf (Tree _ []) = True
+findName :: [String] -> String
+findName (n:_) = n
+
+findChildren :: [String] -> [String]
+findChildren cs
+  | length cs > 2 = map (filter (/= ',')) (drop 3 cs)
+  | otherwise = []
+
+getName :: Node -> Name
+getName (Node name _) = name
+
+getChildren :: Node -> [Name]
+getChildren (Node _ children) = children
+
+newNode :: Name -> [Name] -> Node
+newNode name children = Node name children
+
+addChild :: Node -> Name -> Node
+addChild (Node name children) child = Node name (child:children)
+
+isLeaf :: Node -> Bool
+isLeaf (Node _ []) = True
 isLeaf _ = False
+
+--------------------------------------------------------------------------------
+
