@@ -1,39 +1,35 @@
 module Day07 where
 import Lib (fileToLines, apply)
-import Data.List ((!!), findIndices, findIndex)
+import Data.List ((!!))
 import Data.Char (isNumber)
+-- import Data.Tree (..)
 
-data Node = Node Name Weight [Name] deriving (Eq, Show)
-type Name = String
-type Weight = Int
+-- data Program = Program Name Weight deriving (Eq, Show)
+-- type Name = String
+-- type Weight = Int
 
 day07_1 :: IO String
-day07_1 = apply (getRootNode . createNodes) contents
+day07_1 = apply findRoot contents
   where
     contents = fileToLines path
     path = "inputs/day07.txt"
 
-createNodes :: [String] -> [Node]
-createNodes ss = map parseNode ss
+findRoot :: [String] -> String
+findRoot c = fr c c
 
-getRootNode :: [Node] -> String
-getRootNode nodes = getRootNode' nodes 0
-
-getRootNode' :: [Node] -> Int -> String
-getRootNode' nodes ix = case getParentIndex (nodes !! ix) nodes of
-                          Nothing -> getName (nodes !! ix)
-                          Just n -> getRootNode' nodes n
-
-getParentIndex :: Node -> [Node] -> Maybe Int
-getParentIndex n ns = findIndex (`hasChild` (getName n)) ns
-
-hasChild :: Node -> Name -> Bool
-hasChild n c = any (== c) (getChildren n)
-
-parseNode :: String -> Node
-parseNode s = Node (findName tokens) (findWeight tokens) (findChildren tokens)
+fr :: [String] -> [String] -> String
+fr (current:more) contents
+  | isRoot = findName $ words current
+  | otherwise = fr more contents
   where
-    tokens = words s
+    isRoot = not (hasParent current contents)
+
+hasParent :: String -> [String] -> Bool
+hasParent current contents = name `elem` allChildren
+  where
+    name = findName tokens
+    tokens = words current
+    allChildren = concat $ map (findChildren . words) contents
 
 findName :: [String] -> String
 findName (n:_) = n
@@ -46,31 +42,13 @@ findChildren cs
 findWeight :: [String] -> Int
 findWeight cs = read $ filter isNumber $ cs !! 1
 
-getName :: Node -> Name
-getName (Node name _ _) = name
-
-getChildren :: Node -> [Name]
-getChildren (Node _ _ children) = children
-
-newNode :: Name -> Int -> [Name] -> Node
-newNode name weight children = Node name weight children
-
-addChild :: Node -> Name -> Node
-addChild (Node name weight children) child = Node name weight (child:children)
-
-isLeaf :: Node -> Bool
-isLeaf (Node _ _ []) = True
-isLeaf _ = False
-
 --------------------------------------------------------------------------------
 day07_2 :: IO String
-day07_2 = apply something contents
+day07_2 = apply (show . findCorrectWeight) contents
   where
     contents = fileToLines path
     path = "inputs/day07.txt"
 
-something :: [String] -> String
-something _ = "Not done"
-
-getNodeWeight :: Node -> Int
-getNodeWeight (Node _ weight _) = weight
+findCorrectWeight :: [String] -> Int
+findCorrectWeight contents = -1
+    
