@@ -2,7 +2,7 @@ module Day07 where
 import Lib (fileToLines, apply)
 import Data.List ((!!))
 import Data.Char (isNumber)
-import Data.Tree (Tree (..))
+import Data.Tree (Tree (..), levels)
 
 data Program = Program Name Weight deriving (Eq, Show)
 type Name = String
@@ -44,16 +44,14 @@ findWeight cs = read $ filter isNumber $ cs !! 1
 
 --------------------------------------------------------------------------------
 day07_2 :: IO String
+--day07_2 = apply (show . findCorrectWeight) contents
 day07_2 = apply (show . findCorrectWeight) contents
   where
     contents = fileToLines path
     path = "inputs/day07.txt"
 
-findCorrectWeight :: [String] -> Int
-findCorrectWeight contents = head $
-                             map getWeight $
-                             findInbalancedLayer $
-                             makeTree (map words contents) root
+findCorrectWeight :: [String] -> String
+findCorrectWeight contents = filter (/= '\"') $ filter (/= '\\') $ show $ levels $ makeTree (map words contents) root
   where
     root = findRoot contents
 
@@ -70,9 +68,9 @@ findRow label (c:cs)
   | head c == label = c
   | otherwise = findRow label cs
 
-findInbalancedLayer :: Tree Program -> [Tree Program]
-findInbalancedLayer (Node _ children) = children -- Not correct, unfinished implementation!
-
 getWeight :: Tree Program -> Int
-getWeight (Node (Program _ weight) []) = weight
-getWeight (Node (Program _ weight) children) = weight + (sum $ map getWeight children)
+getWeight (Node program []) = getProgramWeight program
+getWeight (Node program children) = (getProgramWeight program) + (sum $ map getWeight children)
+
+getProgramWeight :: Program -> Int
+getProgramWeight (Program _ weight) = weight
