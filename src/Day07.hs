@@ -44,7 +44,6 @@ findWeight cs = read $ filter isNumber $ cs !! 1
 
 --------------------------------------------------------------------------------
 day07_2 :: IO String
---day07_2 = apply (show . findCorrectWeight) contents
 day07_2 = apply (show . findCorrectWeight) contents
   where
     contents = fileToLines path

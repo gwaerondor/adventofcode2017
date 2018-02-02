@@ -12,6 +12,7 @@ import Day04 as D4 (hasNoDuplicates, hasNoAnagrams)
 import Day05 as D5 (getTerminationIndex)
 import Day06 as D6 (cyclesBeforeLoop)
 import Day07 as D7 (findRoot, findCorrectWeight)
+import Day08 as D8 (largestRegister, run)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -102,3 +103,10 @@ specs = describe "Advent of Code 2017" $ do
                    "gyxo (61)",
                    "cntj (57)"]
       `shouldBe` "tknk"
+  describe "Day 08 (1)" $ do
+    it "Small program has highest register 1" $
+      (show . D8.largestRegister . D8.run) ["b inc 5 if a > 1",
+                                            "a inc 1 if b < 5",
+                                            "c dec -10 if a >= 1",
+                                            "c inc -20 if c == 10"]
+      `shouldBe` "1"
