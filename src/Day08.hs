@@ -15,7 +15,13 @@ type Increment = Int
 type Comparison = (Int -> Bool)
 
 day08_1 :: IO String
-day08_1 = apply (show . largestRegister . run) contents
+day08_1 = apply (show . largestRegister . fst . run) contents
+  where
+    contents = fileToLines path
+    path = "inputs/day08.txt"
+
+day08_2 :: IO String
+day08_2 = apply (show . snd . run) contents
   where
     contents = fileToLines path
     path = "inputs/day08.txt"
@@ -26,7 +32,7 @@ largestRegister rs = getValue $ head $ (sortBy (flip compare) rs)
 getValue :: Register -> Value
 getValue (Register _ v) = v
 
-run :: [String] -> [Register]
+run :: [String] -> ([Register], Value)
 run lines = execute instructions $ createAllRegisters instructions
   where
     instructions = map (parseInstruction . words) lines
@@ -63,13 +69,20 @@ toFunction ">=" = (>=)
 toFunction "==" = (==)
 toFunction "!=" = (/=)
 
-execute :: [Instruction] -> [Register] -> [Register]
-execute [] regs = regs
-execute (i:is) regs = case checkCondition i regs of
-                        True ->
-                          execute is (updateRegister i regs)
-                        False ->
-                          execute is regs
+execute :: [Instruction] -> [Register] -> ([Register], Value)
+execute is regs = execute' is regs 0
+
+execute' :: [Instruction] -> [Register] -> Value -> ([Register], Value)
+execute' [] regs highest = (regs, highest)
+execute' (i:is) regs highest = case checkCondition i regs of
+                             True ->
+                               execute' is (updateRegister i regs) newHighest
+                             False ->
+                               execute' is regs highest
+  where
+    updatedRegister = updateRegister i regs
+    newRegisterValue (Instruction n _ _ _) = getRegisterValue n updatedRegister
+    newHighest = max (newRegisterValue i) highest
 
 checkCondition :: Instruction -> [Register] -> Bool
 checkCondition (Instruction _ _ name cond) regs = cond (getRegisterValue name regs)

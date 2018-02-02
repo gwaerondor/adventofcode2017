@@ -105,8 +105,15 @@ specs = describe "Advent of Code 2017" $ do
       `shouldBe` "tknk"
   describe "Day 08 (1)" $ do
     it "Small program has highest register 1" $
-      (show . D8.largestRegister . D8.run) ["b inc 5 if a > 1",
-                                            "a inc 1 if b < 5",
-                                            "c dec -10 if a >= 1",
-                                            "c inc -20 if c == 10"]
+      (show . D8.largestRegister . fst . D8.run) ["b inc 5 if a > 1",
+                                                 "a inc 1 if b < 5",
+                                                 "c dec -10 if a >= 1",
+                                                 "c inc -20 if c == 10"]
       `shouldBe` "1"
+  describe "Day 08 (2)" $ do
+    it "Small program has historically highest register 10" $
+      (show . snd . D8.run) ["b inc 5 if a > 1",
+                              "a inc 1 if b < 5",
+                              "c dec -10 if a >= 1",
+                              "c inc -20 if c == 10"]
+      `shouldBe` "10"
