@@ -14,6 +14,7 @@ import Day06 as D6 (cyclesBeforeLoop)
 import Day07 as D7 (findRoot, findCorrectWeight)
 import Day08 as D8 (largestRegister, run)
 import Day09 as D9 (score, countGarbage)
+import Day10 as D10 (hash)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -150,5 +151,6 @@ specs = describe "Advent of Code 2017" $ do
       D9.countGarbage "<!!!>>" `shouldBe` 0
     it "Some of each has 10 garbage chars" $
       D9.countGarbage "<{o\"i!a,<{i<a>" `shouldBe` 10
-    
-    
+  describe "Day 10 (1)" $ do
+    it "A short list with a short input" $
+      D10.hash [0..4] [3, 4, 1, 5] `shouldBe` [3, 4, 2, 1, 0]
