@@ -13,7 +13,7 @@ import Day05 as D5 (getTerminationIndex)
 import Day06 as D6 (cyclesBeforeLoop)
 import Day07 as D7 (findRoot, findCorrectWeight)
 import Day08 as D8 (largestRegister, run)
-import Day09 as D9 (score)
+import Day09 as D9 (score, countGarbage)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -135,3 +135,20 @@ specs = describe "Advent of Code 2017" $ do
       D9.score "{{<!!>},{<!!>},{<!!>},{<!!>}}" `shouldBe` 9
     it "Bang should invalidate end of garbage symbol" $
       D9.score "{{<a!>},{<a!>},{<a!>},{<ab>}}" `shouldBe` 3
+  describe "Day 09 (2)" $ do
+    it "Empty garbage has length 0" $
+      D9.countGarbage "<>" `shouldBe` 0
+    it "Some regular garbage has length 17" $
+      D9.countGarbage "<random characters>" `shouldBe` 17
+    it "Garbage can contain <" $
+      D9.countGarbage "<<<<>" `shouldBe` 3
+    it "Cancelled garbage doesn't count" $
+      D9.countGarbage "<{!>}>" `shouldBe` 2
+    it "Bang cancels bang" $
+      D9.countGarbage "<!!>" `shouldBe` 0
+    it "Bang cancels >" $
+      D9.countGarbage "<!!!>>" `shouldBe` 0
+    it "Some of each has 10 garbage chars" $
+      D9.countGarbage "<{o\"i!a,<{i<a>" `shouldBe` 10
+    
+    
