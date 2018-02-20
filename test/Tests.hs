@@ -13,6 +13,7 @@ import Day05 as D5 (getTerminationIndex)
 import Day06 as D6 (cyclesBeforeLoop)
 import Day07 as D7 (findRoot, findCorrectWeight)
 import Day08 as D8 (largestRegister, run)
+import Day09 as D9 (score)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -117,3 +118,20 @@ specs = describe "Advent of Code 2017" $ do
                               "c dec -10 if a >= 1",
                               "c inc -20 if c == 10"]
       `shouldBe` "10"
+  describe "Day 09 (1)" $ do
+    it "Tiny group has score of 1" $
+      D9.score "{}" `shouldBe` 1
+    it "Nested groups has higher score" $
+      D9.score "{{{}}}" `shouldBe` 6
+    it "Multiple nested groups have additive score" $
+      D9.score "{{},{}}" `shouldBe` 5
+    it "Multiple deeply nested groups" $
+      D9.score "{{{},{},{{}}}}" `shouldBe` 16
+    it "Garbage should be ignored" $
+      D9.score "{<a>,<a>,<a>,<a>}" `shouldBe` 1
+    it "Ignore nested garbage" $
+      D9.score "{{<ab>},{<ab>},{<ab>},{<ab>}}" `shouldBe` 9
+    it "Bang should invalidate next char even if it is a bang" $
+      D9.score "{{<!!>},{<!!>},{<!!>},{<!!>}}" `shouldBe` 9
+    it "Bang should invalidate end of garbage symbol" $
+      D9.score "{{<a!>},{<a!>},{<a!>},{<ab>}}" `shouldBe` 3
