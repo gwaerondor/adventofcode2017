@@ -14,7 +14,7 @@ import Day06 as D6 (cyclesBeforeLoop)
 import Day07 as D7 (findRoot, findCorrectWeight)
 import Day08 as D8 (largestRegister, run)
 import Day09 as D9 (score, countGarbage)
-import Day10 as D10 (hash)
+import Day10 as D10 (hash, hash2, denseHash, toHex)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -154,3 +154,10 @@ specs = describe "Advent of Code 2017" $ do
   describe "Day 10 (1)" $ do
     it "A short list with a short input" $
       D10.hash [0..4] [3, 4, 1, 5] `shouldBe` [3, 4, 2, 1, 0]
+  describe "Day 10 (2)" $ do
+    it "A dense hash of a single block (16 bytes)" $
+      D10.denseHash [65, 27, 9, 1, 4, 3, 40, 50, 91, 7, 6, 0, 2, 5, 68, 22] `shouldBe` [64]
+    it "The hex representation of 64 is 40" $
+      D10.toHex [64] `shouldBe` "40"
+    it "Hash of the empty string" $
+      (D10.toHex $ D10.hash2 [0..255] []) `shouldBe` "a2582a3a0e66e6e86e3812dcb672a272"

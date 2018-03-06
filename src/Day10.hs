@@ -1,5 +1,7 @@
 module Day10 where
 import Data.Char (ord)
+import Data.Bits (xor)
+import Text.Printf (printf)
 
 type Step = Int
 type Skip = Int
@@ -20,10 +22,10 @@ hash inputList inputLengths = hash' inputList inputLengths skips shifts rounds i
 hash' :: [Int] -> [Length] -> Skip -> Int -> Int -> [Length] -> [Int]
 hash' xs [] _ shifts 1 _ = unshift shifts xs
 hash' xs [] skips shifts rounds initialInput = hash' xs initialInput skips shifts (rounds - 1) initialInput
-hash' xs (il:ils) skips shifts rounds initialInput = hash' newXs ils newSkip newShifts rounds initialInput
+hash' xs (il:ils) skips shifts rounds initialInput = hash' (newXs `seq` newXs) ils newSkip newShifts rounds initialInput
   where
     tied = reverseFirst il xs
-    newXs = shift (il + skips) tied
+    newXs = shift (il + skips) (tied `seq` tied)
     newSkip = skips + 1
     newShifts = shifts + il + skips
 
@@ -46,16 +48,22 @@ unshift steps xs = unshift (steps - 1) ((last xs):(init xs))
 day10_2 :: String
 day10_2 = toHex $ hash2 [0..255] ils
   where
-    ils = (map ord "70,66,255,2,48,0,54,48,80,141,244,254,160,108,1,41") ++ [17, 31, 73, 47, 23]
+    ils = (map ord "70,66,255,2,48,0,54,48,80,141,244,254,160,108,1,41")
 
-hash2 inputList inputLengths = denseHash $ hash' inputList inputLengths skips shifts rounds inputLengths
+hash2 inputList inputLengths = denseHash $ hash' inputList adjustedILs skips shifts rounds adjustedILs
   where
+    adjustedILs = inputLengths ++ [17, 31, 73, 47, 23]
     skips = 0
     shifts = 0
     rounds = 64
 
 denseHash :: [Int] -> [Int]
-denseHash xs = error "not finished!"
+denseHash xs = map (foldl xor 0) $ chunk 16 xs
 
 toHex :: [Int] -> String
-toHex _ = error "not finished!"
+toHex x = concat $ map (printf "%02x") x
+
+chunk :: Int -> [a] -> [[a]]
+chunk n xs
+  | length xs > n = (take n xs) : (chunk n (drop n xs))
+  | otherwise = [xs]
