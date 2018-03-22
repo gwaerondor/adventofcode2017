@@ -44,3 +44,13 @@ findChildren ix ((Pipe i cs):ps)
 
 getFrom :: Pipe -> Int
 getFrom (Pipe from _) = from
+
+--------------------------------------------------------------------------------
+day12_2 :: IO String
+day12_2 = apply countNumberOfGroups contents
+  where
+    contents = fileToLines path
+    path = "inputs/day12.txt"
+
+countNumberOfGroups _ = 0 -- Remove all in group 0, get first index, remove all
+                          -- in that group, and repeat. Count steps. Profit.
