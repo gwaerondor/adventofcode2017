@@ -15,6 +15,7 @@ import Day07 as D7 (findRoot, findCorrectWeight)
 import Day08 as D8 (largestRegister, run)
 import Day09 as D9 (score, countGarbage)
 import Day10 as D10 (hash, hash2, denseHash, toHex)
+import Day12 as D12 (countSizeOfGroupZero)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -161,3 +162,13 @@ specs = describe "Advent of Code 2017" $ do
       D10.toHex [64] `shouldBe` "40"
     it "Hash of the empty string" $
       (D10.toHex $ D10.hash2 [0..255] []) `shouldBe` "a2582a3a0e66e6e86e3812dcb672a272"
+  describe "Day 12 (1)" $ do
+    it "Small sample with 6 programs in group 0" $
+      D12.countSizeOfGroupZero ["0 <-> 2",
+                                "1 <-> 1",
+                                "2 <-> 0, 3, 4",
+                                "3 <-> 2, 4",
+                                "4 <-> 2, 3, 6",
+                                "5 <-> 6",
+                                "6 <-> 4, 5"]
+      `shouldBe` 6
