@@ -52,5 +52,20 @@ day12_2 = apply countNumberOfGroups contents
     contents = fileToLines path
     path = "inputs/day12.txt"
 
-countNumberOfGroups _ = 0 -- Remove all in group 0, get first index, remove all
-                          -- in that group, and repeat. Count steps. Profit.
+countNumberOfGroups lines = cnog pipes
+  where
+    pipes = parsePipes lines
+
+cnog :: [Pipe] -> Int
+cnog [] = 0
+cnog (p:ps) = 1 + (cnog filtered)
+  where
+    firstIndex = getFrom p
+    allConnected = findAllConnectedPipes firstIndex (p:ps)
+    filtered = filterPipes (p:ps) allConnected
+
+filterPipes :: [Pipe] -> [Int] -> [Pipe]
+filterPipes [] _ = []
+filterPipes (p:ps) exclude
+  | (getFrom p) `elem` exclude = filterPipes ps exclude
+  | otherwise = p:(filterPipes ps exclude)
