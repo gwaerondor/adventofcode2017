@@ -16,6 +16,7 @@ import Day08 as D8 (largestRegister, run)
 import Day09 as D9 (score, countGarbage)
 import Day10 as D10 (hash, hash2, denseHash, toHex)
 import Day12 as D12 (countSizeOfGroupZero, countNumberOfGroups)
+import Day13 as D13 (countSeverity, parseScanners)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -183,3 +184,6 @@ specs = describe "Advent of Code 2017" $ do
                                "5 <-> 6",
                                "6 <-> 4, 5"]
       `shouldBe` 2
+  describe "Day 13 (1)" $ do
+    it "Small firewall has severity of 24" $
+      D13.countSeverity ["0: 3", "1: 2", "4: 4", "6: 4"] `shouldBe` 24
