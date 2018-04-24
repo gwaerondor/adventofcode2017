@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module Day13 where
 import Lib (fileToLines, apply)
 import Data.String (words)
@@ -38,7 +39,6 @@ countSeverityStepwise ss = sum $
 getSeverityByLayer :: Scanner -> Int
 getSeverityByLayer (Scanner layer depth _ _) = layer * depth
 
---hasCollision _ _ = False
 hasCollision :: Scanner -> Bool
 hasCollision s = (getPos state) == 0
   where
@@ -74,10 +74,6 @@ getPos (Scanner _ _ position _) = position
 getLayer :: Scanner -> Layer
 getLayer (Scanner layer _ _ _) = layer
 
-updatePos :: Direction -> Position -> Position
-updatePos Down p = p + 1
-updatePos Up p = p - 1
-
 deepestLayer :: [Scanner] -> Layer
 deepestLayer ss = maximum $ map getLayer ss
 
@@ -85,3 +81,28 @@ getScanner :: Layer -> [Scanner] -> Scanner
 getScanner layer (s:ss)
   | layer == (getLayer s) = s
   | otherwise = getScanner layer ss
+
+--------------------------------------------------------------------------------
+day13_2 = apply countTicks contents
+  where
+    contents = fileToLines path
+    path = "inputs/day13.txt"
+
+countTicks :: [String] -> Int
+countTicks !contents = findCollisionFreeDelay state state 0
+  where
+    scanners = parseScanners contents
+    state = (map stepByLayerNumber scanners)
+
+findCollisionFreeDelay :: [Scanner] -> [Scanner] -> Int -> Int
+findCollisionFreeDelay [] _ !delay = delay
+findCollisionFreeDelay !((!s):(!ss)) !orig !delay
+  | collided = findCollisionFreeDelay (map step orig) (map step orig) (delay + 1)
+  | otherwise = findCollisionFreeDelay ss orig delay
+  where
+    collided = (getPos s) == 0
+
+stepByLayerNumber :: Scanner -> Scanner
+stepByLayerNumber !scanner = (iterate step scanner) !! getLayer scanner
+
+

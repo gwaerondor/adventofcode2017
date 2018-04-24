@@ -16,7 +16,8 @@ import Day08 as D8 (largestRegister, run)
 import Day09 as D9 (score, countGarbage)
 import Day10 as D10 (hash, hash2, denseHash, toHex)
 import Day12 as D12 (countSizeOfGroupZero, countNumberOfGroups)
-import Day13 as D13 (countSeverity, parseScanners)
+import Day13 as D13 (countSeverity, countTicks)
+import Day15 as D15 (bitsMatch, nextValueA, nextValueB, nextValueA2, nextValueB2, judge, judge2)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -187,3 +188,31 @@ specs = describe "Advent of Code 2017" $ do
   describe "Day 13 (1)" $ do
     it "Small firewall has severity of 24" $
       D13.countSeverity ["0: 3", "1: 2", "4: 4", "6: 4"] `shouldBe` 24
+  describe "Day 13 (2)" $ do
+    it "Small firewall must wait for 10 ticks" $
+      D13.countTicks ["0: 3", "1: 2", "4: 4", "6: 4"] `shouldBe` 10
+  describe "Day 15 (1)" $ do
+    it "The 16 least significant bits match" $
+      D15.bitsMatch 245556042 1431495498 `shouldBe` True
+    it "The 16 least significant bits do not match" $
+      D15.bitsMatch 1092455 430625591 `shouldBe` False
+    it "Generating the next value for generator A" $
+      (take 6 $ iterate D15.nextValueA 65)
+      `shouldBe` [65, 1092455, 1181022009, 245556042, 1744312007, 1352636452]
+    it "Generating the next value for generator B" $
+      (take 6 $ iterate D15.nextValueB 8921)
+      `shouldBe` [8921, 430625591, 1233683848, 1431495498, 137874439, 285222916]
+    it "First five iterations have a judgment of 1" $
+      D15.judge 65 8921 0 5 `shouldBe` 1
+  describe "Day 15 (2)" $ do
+    it "Values by generator A must be divisible by 4" $
+      (take 6 $ iterate D15.nextValueA2 65)
+      `shouldBe` [65, 1352636452, 1992081072, 530830436, 1980017072, 740335192]
+    it "Values by generator B must be divisible by 8" $
+      (take 6 $ iterate D15.nextValueB2 8921)
+      `shouldBe` [8921, 1233683848, 862516352, 1159784568, 1616057672, 412269392]
+    it "Five iterations have a judgment of 0" $
+      D15.judge2 65 8921 0 5 `shouldBe` 0
+    --it "Five million iterations have a judgment of 309" $
+      --D15.judge2 65 8921 0 5000000 `shouldBe` 309
+  
