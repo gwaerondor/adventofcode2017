@@ -215,4 +215,4 @@ specs = describe "Advent of Code 2017" $ do
       D15.judge2 65 8921 0 5 `shouldBe` 0
     --it "Five million iterations have a judgment of 309" $
       --D15.judge2 65 8921 0 5000000 `shouldBe` 309
-  
+    
