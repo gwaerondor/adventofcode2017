@@ -162,9 +162,8 @@ specs = describe "Advent of Code 2017" $ do
       D10.denseHash [65, 27, 9, 1, 4, 3, 40, 50, 91, 7, 6, 0, 2, 5, 68, 22] `shouldBe` [64]
     it "The hex representation of 64 is 40" $
       D10.toHex [64] `shouldBe` "40"
-    -- This one is slow, removed while fixing other stuff.
-    -- it "Hash of the empty string" $
-    --   (D10.toHex $ D10.hash2 [0..255] []) `shouldBe` "a2582a3a0e66e6e86e3812dcb672a272"
+    it "Hash of the empty string" $
+      (D10.toHex $ D10.hash2 [0..255] []) `shouldBe` "a2582a3a0e66e6e86e3812dcb672a272"
   describe "Day 12 (1)" $ do
     it "Small sample with 6 programs in group 0" $
       D12.countSizeOfGroupZero ["0 <-> 2",

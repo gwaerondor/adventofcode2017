@@ -37,9 +37,10 @@ reverseFirst :: Length -> [a] -> [a]
 reverseFirst !n !xs = (reverse $ take n xs) ++ (drop n xs)
 
 shift :: Int -> [a] -> [a]
-shift !steps !xs = (drop n xs) ++ (take n xs)
+shift !steps !xs =
+  let s = (drop n xs) ++ (take n xs) in (s `seq` s)
   where
-    !n = steps `mod` (length xs) 
+    !n = steps `mod` (length xs)
 
 unshift :: Int -> [a] -> [a]
 unshift 0 !xs = xs
