@@ -18,7 +18,8 @@ import Day10 as D10 (hash, hash2, denseHash, toHex)
 import Day12 as D12 (countSizeOfGroupZero, countNumberOfGroups)
 import Day13 as D13 (countSeverity, countTicks)
 import Day15 as D15 (bitsMatch, nextValueA, nextValueB, nextValueA2, nextValueB2, judge, judge2)
-import Day16 as D16 (dance, parseInstruction)
+import Day16 as D16 (dance, parseInstruction, run', Instruction(..))
+import Day17 as D17 (spinlock)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -213,8 +214,15 @@ specs = describe "Advent of Code 2017" $ do
       `shouldBe` [8921, 1233683848, 862516352, 1159784568, 1616057672, 412269392]
     it "Five iterations have a judgment of 0" $
       D15.judge2 65 8921 0 5 `shouldBe` 0
-    --it "Five million iterations have a judgment of 309" $
-      --D15.judge2 65 8921 0 5000000 `shouldBe` 309
   describe "Day 16 (1)" $ do
     it "Five programs with three instructions" $
       D16.dance "abcde" "s1,x3/4,pe/b" `shouldBe` "baedc"
+  describe "Day 16 (2)" $ do
+    it "Five programs with three instructions, twice" $
+      D16.run' 2 [Spin 1,
+                  Exchange 3 4,
+                  Partner 'e' 'b'] "abcde"
+      `shouldBe` "ceadb"
+  describe "Day 17 (1)" $ do
+    it "Three steps per insert gives 638 after final insertion" $
+      D17.spinlock 3 `shouldBe` [2017, 638]

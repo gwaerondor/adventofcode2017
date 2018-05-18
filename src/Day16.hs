@@ -9,6 +9,11 @@ day16_1 = apply (dance ['a'..'p']) fileContents
     fileContents = fileToLine path
     path = "inputs/day16.txt"
 
+day16_2 = apply (dance' ['a'..'p']) fileContents
+  where
+    fileContents = fileToLine path
+    path = "inputs/day16.txt"
+
 dance :: String -> String -> String
 dance programs contents = run instructions programs
   where
@@ -16,6 +21,16 @@ dance programs contents = run instructions programs
 
 run :: [Instruction] -> String -> String
 run is ps = foldl (applyInstruction) ps is
+
+dance' :: String -> String -> String
+dance' programs contents = run' oneBillion instructions programs
+  where
+    instructions = (map parseInstruction) $ lines $ (map commaToNL) contents
+    oneBillion = 1000000000
+
+run' :: Int -> [Instruction] -> String -> String
+run' 0 _ ps = ps
+run' iter is ps = ps `seq` run' (iter - 1) is (run is ps)
 
 parseInstruction :: String -> Instruction
 parseInstruction ('s':spins) = Spin (read spins)
