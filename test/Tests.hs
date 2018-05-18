@@ -20,6 +20,7 @@ import Day13 as D13 (countSeverity, countTicks)
 import Day15 as D15 (bitsMatch, nextValueA, nextValueB, nextValueA2, nextValueB2, judge, judge2)
 import Day16 as D16 (dance, parseInstruction, run', Instruction(..))
 import Day17 as D17 (spinlock)
+import Day18 as D18 (firstRecoveredSound)
 
 main :: IO ()
 main = hspecWith defaultConfig {configFastFail = True} specs
@@ -225,4 +226,17 @@ specs = describe "Advent of Code 2017" $ do
       `shouldBe` "ceadb"
   describe "Day 17 (1)" $ do
     it "Three steps per insert gives 638 after final insertion" $
-      D17.spinlock 3 `shouldBe` [2017, 638]
+      D17.spinlock 3 0 2017 [0] `shouldBe` [2017, 638]
+  describe "Day 18 (1)" $ do
+    it "Short sound file plays a frequency of 4" $
+      D18.firstRecoveredSound ["set a 1",
+                               "add a 2",
+                               "mul a a",
+                               "mod a 5",
+                               "snd a",
+                               "set a 0",
+                               "rcv a",
+                               "jgz a -1",
+                               "set a 1",
+                               "jgz a -2"]
+      `shouldBe` 4
