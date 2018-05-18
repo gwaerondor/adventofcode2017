@@ -1,5 +1,8 @@
 module Day17 where
 
+day17_1 :: [Int]
+day17_1 = spinlock 314
+
 spinlock :: Int -> [Int]
 spinlock steps = take 2 $ last $ take 2018 $ iterate (run steps) [0]
 
